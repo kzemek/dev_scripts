@@ -4,22 +4,19 @@ MAINTAINER Konrad Zemek <konrad.zemek@gmail.com>
 ADD http://packages.onedata.org/scientific/6x/onedata.repo \
     /etc/yum.repos.d/onedata.repo
 
-RUN yum update -y && \
-    yum clean all
+RUN sed -i 's/enabled = 0/enabled=1/' /etc/yum.repos.d/onedata.repo
 
-RUN yum install -y --enablerepo=onedata make fuse-devel openssl-devel libtool-ltdl-devel \
+ADD http://toolkit.globus.org/ftppub/gt6/installers/repo/globus-toolkit-repo-latest.noarch.rpm \
+    globus-toolkit-repo-latest.noarch.rpm
+
+RUN yum install -y yum-conf-epel
+RUN yum localinstall -y globus-toolkit-repo-latest.noarch.rpm
+RUN yum update -y
+RUN yum install -y make fuse-devel openssl-devel libtool-ltdl-devel \
                    ninja-build binutils-devel boost-devel cmake \
                    gcc gcc-c++ libstdc++-devel libtool-ltdl-devel \
-                   protobuf-compiler protobuf-devel && \
-    yum clean all
-
-RUN yum install -y git && \
-    yum clean all
-
-RUN yum install -y which && \
-    yum clean all
+                   protobuf-compiler protobuf-devel git which svn \
+                   erlang erlang-hipe botan-devel rpm-build
 
 RUN ln -s /usr/bin/ninja-build /usr/bin/ninja
 
-RUN yum install -y svn && \
-    yum clean all

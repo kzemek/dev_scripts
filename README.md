@@ -6,14 +6,14 @@ Scripts for starting demo environment.
 Getting Started
 ---------------
 
-1. Run make to build docker **sl_builder** and **builder**
-2. Prepare globalregistry rpm (run on cloud: 'make rpm', or take it from 'scp -i ~/.ssh/id_bamboo root@172.16.67.107:~/globalregistry-Linux.x86_64.rpm .')
-3. Prepare oneprovider deb ('./make.py --image onedata/builder:v7 deb', make.py from this package can be used)
-4. Add routing for **onedata.org**, **provider1.onedata.dev.docker**, **provider2.onedata.dev.docker** to /etc/hosts, IPs can be set to 127.0.0.1, as they get overridden by script
-5. Edit **bamboos/docker/demo_up.py** input vars
-6. Kill all dockers: 'docker kill $(docker ps -q) ; docker rm $(docker ps -aq)'
-7. Run 'sudo ./bamboos/docker/demo.up'
-8. You may chceck logs, or attach to **gr.onedata.dev.docker**, **provider1.onedata.dev.docker** **provider2.onedata.dev.docker** dockers, installation takes a while
+1. Run make to build **onedata/sl_builder:v2** docker
+2. Prepare globalregistry rpm: `./make.py -i onedata/sl_builder:v2 rpm`
+3. Prepare oneprovider rpm: `release/oneprovider_rpm.sh` inside **bamboos/feature/demo2** repo.
+4. Edit **bamboos/docker/demo_up.py** input vars
+5. Kill all dockers: `docker rm -fv $(docker ps -aq)`
+6. Run: `python2 ./bamboos/docker/demo_up.py`
+7. Add routes printed by the script to `/etc/hosts`
+8. You may want to check logs, or attach to **gr.onedata.dev.docker**, **provider1.onedata.dev.docker** **provider2.onedata.dev.docker** dockers; installation takes a while
 9. 'https://onedata.org' is up, 'https://provider1.onedata.dev.docker:9443' and 'https://provider2.onedata.dev.docker:9443' need registration.
 
 NOTE:

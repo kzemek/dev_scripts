@@ -7,12 +7,12 @@ from environment import common, docker
 sl_builder_image = 'onedata/sl_builder:v2'
 builder_image = 'onedata/worker'
 
-config_dir = '/home/konrad/plgrid/dev_scripts/cfg'
+config_dir = '/home/kzemek/plgrid/dev_scripts/cfg'
 
-globalregistry_pkg_dir = '/home/konrad/plgrid/globalregistry/rel'
-globalregistry_pkg_name = 'globalregistry-v2.1.0.60.g12e57a7-1.x86_64.rpm'
+globalregistry_pkg_dir = '/home/kzemek/plgrid/globalregistry/rel'
+globalregistry_pkg_name = 'globalregistry-v2.1.0.64.g29c6ff5-1.x86_64.rpm'
 
-provider_pkg_dir = '/home/konrad/plgrid/bamboos/release/build'
+provider_pkg_dir = '/home/kzemek/plgrid/bamboos/release/build'
 provider_pkg_name = 'oneprovider-2.5.5-1.el6.x86_64.rpm'
 #===================
 
@@ -43,8 +43,8 @@ provider1 = docker.run(
              (config_dir, '/root/cfg', 'ro')],
     dns_list=dns,
     link={gr_name: 'onedata.org'},
+    envs={'ONEPANEL_MULTICAST_ADDRESS': '238.255.0.1'},
     command='yum localinstall -y pkg/' + provider_pkg_name + '''
-sed -i \"s/{239, 255, 0, 1}/{238, 255, 0, 1}/g\" /opt/oneprovider/nodes/onepanel/etc/app.config
 sleep 5
 onepanel_admin --install /root/cfg/prov1.cfg
 bash''')

@@ -14,6 +14,9 @@ globalregistry_pkg_name = 'globalregistry-v2.1.0.64.g29c6ff5-1.x86_64.rpm'
 
 provider_pkg_dir = '/home/kzemek/plgrid/bamboos/release/build'
 provider_pkg_name = 'oneprovider-2.5.5-1.el6.x86_64.rpm'
+
+direct_storage = '/home/kzemek/plgrid/oneclient/mnt'
+username = 'plgkzemek' 
 #===================
 
 dns, dns_output = common.set_up_dns('auto', 'onedata')
@@ -40,11 +43,13 @@ provider1 = docker.run(
     workdir='/root',
     name='provider1_onedata',
     volumes=[(provider_pkg_dir, '/root/pkg', 'ro'),
-             (config_dir, '/root/cfg', 'ro')],
+             (config_dir, '/root/cfg', 'ro'),
+             (direct_storage, '/mnt', 'rw')],
     dns_list=dns,
     link={gr_name: 'onedata.org'},
     envs={'ONEPANEL_MULTICAST_ADDRESS': '238.255.0.1'},
-    command='yum localinstall -y pkg/' + provider_pkg_name + '''
+    run_params=['--privileged=true'],
+    command='useradd plgkzemek -G fuse;' + 'yum localinstall -y pkg/' + provider_pkg_name + '''
 sleep 5
 onepanel_admin --install /root/cfg/prov1.cfg
 bash''')
@@ -61,6 +66,7 @@ provider2 = docker.run(
              (config_dir, '/root/cfg', 'ro')],
     dns_list=dns,
     link={gr_name: 'onedata.org'},
+    run_params=['--privileged=true'],
     command='yum localinstall -y pkg/' + provider_pkg_name + '''
 sleep 5
 onepanel_admin --install /root/cfg/prov2.cfg

@@ -18,5 +18,7 @@ RUN yum install -y make fuse-devel openssl-devel libtool-ltdl-devel \
                    protobuf-compiler protobuf-devel git which svn \
                    erlang erlang-hipe botan-devel rpm-build
 
+RUN yum install -y fuse vim
+
 RUN ln -s /usr/bin/ninja-build /usr/bin/ninja
 
